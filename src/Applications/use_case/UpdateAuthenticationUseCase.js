@@ -1,20 +1,33 @@
-const AccessToken = require('../../Domains/authentications/entities/AccessToken');
-const RefreshToken = require('../../Domains/authentications/entities/RefreshToken');
-
 class UpdateAuthenticationUseCase {
-  constructor({ authenticationRepository, tokenManager }) {
+  constructor({
+    authenticationRepository,
+    authenticationTokenManager,
+  }) {
     this._authenticationRepository = authenticationRepository;
-    this._tokenManager = tokenManager;
+    this._authenticationTokenManager = authenticationTokenManager;
   }
 
   async execute(payload) {
-    const refreshToken = new RefreshToken(payload);
+    this._validatePayload(payload);
 
-    await this._authenticationRepository.verifyRefreshToken(refreshToken);
-    const userId = await this._tokenManager.verifyRefreshToken(refreshToken);
-    const accessToken = await this._tokenManager.generateAccessToken(userId);
+    const { refreshToken } = payload;
 
-    return new AccessToken({ accessToken });
+    await this._authenticationTokenManager.verifyRefreshToken(refreshToken);
+    await this._authenticationRepository.checkAvailabilityToken(refreshToken);
+
+    const decodedPayload = await this._authenticationTokenManager.decodePayload(refreshToken);
+
+    return this._authenticationTokenManager.createAccessToken(decodedPayload);
+  }
+
+  _validatePayload({ refreshToken }) {
+    if (!refreshToken) {
+      throw new Error('UPDATE_AUTHENTICATION_USE_CASE.NOT_CONTAIN_REFRESH_TOKEN');
+    }
+
+    if (typeof refreshToken !== 'string') {
+      throw new Error('UPDATE_AUTHENTICATION_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION');
+    }
   }
 }
 

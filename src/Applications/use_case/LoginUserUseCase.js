@@ -1,26 +1,38 @@
-const LoginUser = require('../../Domains/authentications/entities/LoginUser');
-const LoginUserResult = require('../../Domains/authentications/entities/LoginUserResult');
+const UserLogin = require('../../Domains/users/entities/UserLogin');
+const NewAuth = require('../../Domains/authentications/entities/NewAuth');
 
 class LoginUserUseCase {
   constructor({
-    authenticationRepository,
     userRepository,
-    tokenManager,
+    authenticationRepository,
+    authenticationTokenManager,
+    passwordHash,
   }) {
-    this._authenticationRepository = authenticationRepository;
     this._userRepository = userRepository;
-    this._tokenManager = tokenManager;
+    this._authenticationRepository = authenticationRepository;
+    this._authenticationTokenManager = authenticationTokenManager;
+    this._passwordHash = passwordHash;
   }
 
-  async execute(payload) {
-    const loginUser = new LoginUser(payload);
-    const userId = await this._userRepository.verifyUserCredential(loginUser);
+  async execute(useCasePayload) {
+    const { username, password } = new UserLogin(useCasePayload);
 
-    const refreshToken = await this._tokenManager.generateRefreshToken({ id: userId });
-    await this._authenticationRepository.addRefreshToken({ refreshToken });
-    const accessToken = await this._tokenManager.generateAccessToken({ id: userId });
+    const encryptedPassword = await this._userRepository.getPasswordByUsername(username);
 
-    return new LoginUserResult({ accessToken, refreshToken });
+    await this._passwordHash.comparePassword(password, encryptedPassword);
+
+    const id = await this._userRepository.getIdByUsername(username);
+
+    const accessToken = await this._authenticationTokenManager
+      .createAccessToken({ id, username });
+    const refreshToken = await this._authenticationTokenManager
+      .createRefreshToken({ id, username });
+
+    const newAuthentication = new NewAuth({ accessToken, refreshToken });
+
+    await this._authenticationRepository.addToken(refreshToken);
+
+    return newAuthentication;
   }
 }
 

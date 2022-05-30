@@ -12,7 +12,7 @@ const AuthenticationsTableTestHelper = {
   },
   async findToken(token) {
     const stmt = {
-      text: 'SELECT * FROM authentications WHERE token = $1',
+      text: 'SELECT token FROM authentications WHERE token = $1',
       values: [token],
     };
 
@@ -20,7 +20,7 @@ const AuthenticationsTableTestHelper = {
     return result.rows;
   },
   async cleanTable() {
-    const stmt = 'TRUNCATE TABLE authentications';
+    const stmt = 'TRUNCATE authentications';
     await pool.query(stmt);
   },
 };

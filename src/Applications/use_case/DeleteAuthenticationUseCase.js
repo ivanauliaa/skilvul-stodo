@@ -1,4 +1,4 @@
-class LogoutUserUseCase {
+class DeleteAuthenticationUseCase {
   constructor({ authenticationRepository }) {
     this._authenticationRepository = authenticationRepository;
   }
@@ -23,4 +23,4 @@ class LogoutUserUseCase {
   }
 }
 
-module.exports = LogoutUserUseCase;
+module.exports = DeleteAuthenticationUseCase;
