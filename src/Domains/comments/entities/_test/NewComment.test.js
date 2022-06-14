@@ -31,5 +31,7 @@ describe('NewComment entities', () => {
 
     expect(newComment).toBeInstanceOf(NewComment);
     expect(newComment.content).toEqual(payload.content);
+    expect(newComment.owner).toEqual(payload.owner);
+    expect(newComment.threadId).toEqual(payload.threadId);
   });
 });
