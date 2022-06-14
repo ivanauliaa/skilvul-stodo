@@ -28,6 +28,6 @@ describe('UserLogin entities', () => {
 
     expect(userLogin).toBeInstanceOf(UserLogin);
     expect(userLogin.username).toEqual(payload.username);
-    expect(userLogin.fullname).toEqual(payload.fullname);
+    expect(userLogin.password).toEqual(payload.password);
   });
 });
