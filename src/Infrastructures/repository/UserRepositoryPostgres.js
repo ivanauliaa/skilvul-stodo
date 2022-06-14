@@ -40,12 +40,12 @@ class UserRepositoryPostgres extends UserRepository {
   }
 
   async getPasswordByUsername(username) {
-    const query = {
+    const stmt = {
       text: 'SELECT password FROM users WHERE username = $1',
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const result = await this._pool.query(stmt);
 
     if (!result.rowCount) {
       throw new InvariantError('username tidak ditemukan');
@@ -55,12 +55,12 @@ class UserRepositoryPostgres extends UserRepository {
   }
 
   async getIdByUsername(username) {
-    const query = {
+    const stmt = {
       text: 'SELECT id FROM users WHERE username = $1',
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const result = await this._pool.query(stmt);
 
     if (!result.rowCount) {
       throw new InvariantError('user tidak ditemukan');

@@ -7,17 +7,11 @@ class AddCommentUseCase {
     this._commentRepository = commentRepository;
   }
 
-  async execute(payload) {
-    const newComment = new NewComment(payload);
+  async execute(useCasePayload) {
+    const newComment = new NewComment(useCasePayload);
 
     await this._threadRepository.getThreadById(newComment.threadId);
-    const commentId = await this._commentRepository.addComment(newComment);
-
-    return new AddedComment({
-      id: commentId,
-      content: newComment.content,
-      owner: newComment.owner,
-    });
+    return this._commentRepository.addComment(newComment);
   }
 }
 
