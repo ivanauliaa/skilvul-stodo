@@ -17,7 +17,7 @@ describe('DeleteCommentUseCase', () => {
       .mockImplementation(() => Promise.resolve());
     mockCommentRepository.verifyCommentOwner = jest.fn()
       .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.deleteComment = jest.fn()
+    mockCommentRepository.deleteCommentById = jest.fn()
       .mockImplementation(() => Promise.resolve());
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
@@ -32,6 +32,6 @@ describe('DeleteCommentUseCase', () => {
       useCasePayload.commentId,
       useCasePayload.owner,
     );
-    expect(mockCommentRepository.deleteComment).toBeCalledWith(useCasePayload.commentId);
+    expect(mockCommentRepository.deleteCommentById).toBeCalledWith(useCasePayload.commentId);
   });
 });

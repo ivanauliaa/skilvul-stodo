@@ -1,4 +1,3 @@
-const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const NewComment = require('../../../Domains/comments/entities/NewComment');
 
 class AddCommentUseCase {
@@ -9,8 +8,8 @@ class AddCommentUseCase {
 
   async execute(useCasePayload) {
     const newComment = new NewComment(useCasePayload);
-
     await this._threadRepository.getThreadById(newComment.threadId);
+
     return this._commentRepository.addComment(newComment);
   }
 }

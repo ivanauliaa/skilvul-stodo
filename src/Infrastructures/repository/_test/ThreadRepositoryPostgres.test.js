@@ -1,6 +1,7 @@
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
@@ -8,6 +9,7 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
     await ThreadsTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -57,30 +59,44 @@ describe('ThreadRepositoryPostgres', () => {
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(threadRepositoryPostgres.getThreadById('dicoding'))
+      await expect(threadRepositoryPostgres.getThreadById('thread-123'))
         .rejects
         .toThrowError(NotFoundError);
     });
 
     it('should return thread correctly', async () => {
       // Arrange
-      await ThreadsTableTestHelper.addThread({
-        id: 'thread-321',
-        title: 'thread title',
-        body: 'thread body',
-        owner: 'user-321',
-      });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        title: 'thread title',
+        body: 'thread body',
+        owner: 'user-123',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-123',
+        content: 'a comment',
+        owner: 'user-123',
+        threadId: 'thread-123',
+      });
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-456',
+        content: 'a comment',
+        owner: 'user-456',
+        threadId: 'thread-123',
+      });
+
       // Action
-      const thread = await threadRepositoryPostgres.getThreadById('thread-321');
+      const thread = await threadRepositoryPostgres.getThreadById('thread-123');
 
       // Assert
       expect(thread).toStrictEqual({
-        id: 'thread-321',
+        id: 'thread-123',
         title: 'thread title',
         body: 'thread body',
-        owner: 'user-321',
+        owner: 'user-123',
       });
     });
   });

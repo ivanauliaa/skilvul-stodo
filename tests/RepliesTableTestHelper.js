@@ -1,24 +1,24 @@
 /* istanbul ignore file */
 const pool = require('../src/Infrastructures/database/postgres/pool');
 
-const ThreadsTableTestHelper = {
-  async addThread({
-    id = 'thread-123',
-    title = 'thread title',
-    body = 'thread body',
+const RepliesTableTestHelper = {
+  async addReply({
+    id = 'reply-123',
+    content = 'a reply',
     owner = 'user-123',
+    comentId = 'comment-123',
     createdAt = new Date().toISOString(),
   }) {
     const stmt = {
-      text: 'INSERT INTO threads VALUES($1, $2, $3, $4, $5)',
-      values: [id, title, body, owner, createdAt],
+      text: 'INSERT INTO replies VALUES($1, $2, $3, $4, $5)',
+      values: [id, content, owner, comentId, createdAt],
     };
 
     await pool.query(stmt);
   },
-  async findThreadById(id) {
+  async findReplyById(id) {
     const stmt = {
-      text: 'SELECT * FROM threads WHERE id = $1',
+      text: 'SELECT * FROM replies WHERE id = $1',
       values: [id],
     };
 
@@ -26,9 +26,9 @@ const ThreadsTableTestHelper = {
     return result.rows;
   },
   async cleanTable() {
-    const stmt = 'TRUNCATE threads';
+    const stmt = 'TRUNCATE replies';
     await pool.query(stmt);
   },
 };
 
-module.exports = ThreadsTableTestHelper;
+module.exports = RepliesTableTestHelper;

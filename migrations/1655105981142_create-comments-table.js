@@ -16,6 +16,10 @@ exports.up = (pgm) => {
     thread_id: {
       type: 'VARCHAR(50)',
     },
+    created_at: {
+      type: 'TEXT',
+      notNull: true,
+    },
     deleted_at: {
       type: 'TEXT',
     },
