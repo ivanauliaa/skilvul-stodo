@@ -2,14 +2,16 @@ const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
+const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ThreadRepositoryPostgres', () => {
   afterEach(async () => {
-    await ThreadsTableTestHelper.cleanTable();
+    await RepliesTableTestHelper.cleanTable();
     await CommentsTableTestHelper.cleanTable();
+    await ThreadsTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -68,7 +70,7 @@ describe('ThreadRepositoryPostgres', () => {
       // Arrange
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
-      await ThreadsTableTestHelper.addThread({
+      const threadId = await ThreadsTableTestHelper.addThread({
         id: 'thread-123',
         title: 'thread title',
         body: 'thread body',
@@ -81,15 +83,16 @@ describe('ThreadRepositoryPostgres', () => {
         owner: 'user-123',
         threadId: 'thread-123',
       });
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-456',
-        content: 'a comment',
-        owner: 'user-456',
-        threadId: 'thread-123',
+
+      await RepliesTableTestHelper.addReply({
+        id: 'reply-123',
+        content: 'a reply',
+        owner: 'user-123',
+        commentId: 'comment-123',
       });
 
       // Action
-      const thread = await threadRepositoryPostgres.getThreadById('thread-123');
+      const thread = await threadRepositoryPostgres.getThreadById(threadId);
 
       // Assert
       expect(thread).toStrictEqual({
