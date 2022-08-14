@@ -5,21 +5,19 @@ class ThreadDetail {
     this.id = payload.id;
     this.title = payload.title;
     this.body = payload.body;
-    this.createdAt = payload.createdAt;
+    this.date = payload.created_at;
     this.username = payload.username;
-    this.comments = payload.comments;
   }
 
   _verifyPayload({
-    id, title, body, createdAt, username, comments,
+    id, title, body, created_at: date, username,
   }) {
-    if (!id || !title || !body || !createdAt || !username || !comments) {
+    if (!id || !title || !body || !date || !username) {
       throw new Error('THREAD_DETAIL.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
     if (typeof id !== 'string' || typeof title !== 'string' || typeof body !== 'string'
-      || typeof createdAt !== 'string' || typeof username !== 'string'
-      || typeof comments !== 'object') {
+      || typeof date !== 'string' || typeof username !== 'string') {
       throw new Error('THREAD_DETAIL.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

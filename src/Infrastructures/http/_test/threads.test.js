@@ -151,7 +151,7 @@ describe('/threads endpoint', () => {
     it('should return 200 and thread detail', async () => {
       const server = await createServer(container);
 
-      await server.inject({
+      const addUserResponse = await server.inject({
         method: 'POST',
         url: '/users',
         payload: {
@@ -160,6 +160,8 @@ describe('/threads endpoint', () => {
           fullname: 'Dicoding Indonesia',
         },
       });
+
+      // const { data: { addedUser: { id: userId } } } = JSON.parse(addUserResponse);
 
       const loginResponse = await server.inject({
         method: 'POST',

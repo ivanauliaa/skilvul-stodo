@@ -4,21 +4,19 @@ class Reply {
 
     this.id = payload.id;
     this.content = payload.content;
-    this.owner = payload.owner;
-    this.commentId = payload.comment_id;
-    this.createdAt = payload.created_at;
-    this.deletedAt = payload.deleted_at;
+    this.username = payload.username;
+    this.date = payload.created_at;
   }
 
   _verifyPayload({
-    id, content, owner, comment_id: commentId, created_at: createdAt,
+    id, content, username, created_at: date,
   }) {
-    if (!id || !content || !owner || !commentId || !createdAt) {
+    if (!id || !content || !username || !date) {
       throw new Error('REPLY.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof content !== 'string' || typeof owner !== 'string'
-      || typeof commentId !== 'string' || typeof createdAt !== 'string') {
+    if (typeof id !== 'string' || typeof content !== 'string' || typeof username !== 'string'
+      || typeof date !== 'string') {
       throw new Error('REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

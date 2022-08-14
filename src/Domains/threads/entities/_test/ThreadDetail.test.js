@@ -14,9 +14,8 @@ describe('ThreadDetail entitites', () => {
       id: 'thread-123',
       title: 123,
       body: true,
-      createdAt: 456,
-      username: true,
-      comments: 789,
+      username: 'dicoding',
+      created_at: 456,
     };
 
     expect(() => new ThreadDetail(payload)).toThrowError('THREAD_DETAIL.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -27,9 +26,8 @@ describe('ThreadDetail entitites', () => {
       id: 'thread-123',
       title: 'thread title',
       body: 'thread body',
-      createdAt: 'createdAt',
-      username: 'username',
-      comments: [],
+      username: 'dicoding',
+      created_at: 'createdAt',
     };
 
     const threadDetail = new ThreadDetail(payload);
@@ -38,8 +36,7 @@ describe('ThreadDetail entitites', () => {
     expect(threadDetail.id).toEqual(payload.id);
     expect(threadDetail.title).toEqual(payload.title);
     expect(threadDetail.body).toEqual(payload.body);
-    expect(threadDetail.createdAt).toEqual(payload.createdAt);
     expect(threadDetail.username).toEqual(payload.username);
-    expect(threadDetail.comments).toStrictEqual(payload.comments);
+    expect(threadDetail.date).toEqual(payload.created_at);
   });
 });

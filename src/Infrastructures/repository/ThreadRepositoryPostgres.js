@@ -1,5 +1,6 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../Domains/threads/entities/AddedThread');
+const ThreadDetail = require('../../Domains/threads/entities/ThreadDetail');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
@@ -29,42 +30,7 @@ class ThreadRepositoryPostgres extends ThreadRepository {
 
   async getThreadById(id) {
     const stmt = {
-      text: `SELECT t.id, t.title, t.body, t.created_at AS date, u.username,
-        (
-          SELECT json_agg(
-            json_build_object(
-              'id', c.id, 'username', cu.username, 'date', c.created_at, 'content', CASE
-              WHEN c.deleted_at IS NULL THEN
-                c.content
-              ELSE
-                '**komentar telah dihapus**'
-              END,
-              'replies', (
-                SELECT json_agg(
-                  json_build_object(
-                    'id', r.id, 'username', ru.username, 'date', r.created_at, 'content', CASE
-                    WHEN r.deleted_at IS NULL THEN
-                      r.content
-                    ELSE
-                      '**balasan telah dihapus**'
-                    END
-                  )
-                  ORDER by r.created_at ASC
-                )
-                FROM replies r
-                INNER JOIN users ru ON(r.owner = ru.id)
-                WHERE r.comment_id = c.id
-              )
-            )
-            ORDER BY c.created_at ASC
-          )
-          FROM comments c
-          INNER JOIN users cu ON(c.owner = cu.id)
-          WHERE c.thread_id = t.id
-        ) as comments
-      FROM threads t
-      INNER JOIN users u ON(t.owner = u.id)
-      WHERE t.id = $1`,
+      text: 'SELECT * FROM threads WHERE id = $1',
       values: [id],
     };
 
@@ -75,6 +41,19 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     }
 
     return result.rows[0];
+  }
+
+  async verifyThreadAvailability(id) {
+    const stmt = {
+      text: 'SELECT * FROM threads WHERE id = $1',
+      values: [id],
+    };
+
+    const result = await this._pool.query(stmt);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('thread tidak ditemukan');
+    }
   }
 }
 

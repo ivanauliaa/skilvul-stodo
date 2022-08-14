@@ -120,18 +120,8 @@ describe('ReplyRepositoryPostgres', () => {
     });
   });
 
-  describe('getReplyById', () => {
-    it('should throw NotFoundError when reply not found', async () => {
-      // Arrange
-      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
-
-      // Action & Assert
-      await expect(replyRepositoryPostgres.getReplyById('reply-123'))
-        .rejects
-        .toThrowError(NotFoundError);
-    });
-
-    it('should return reply correctly', async () => {
+  describe('getRepliesByCommentId', () => {
+    it('should return comments by thread id correctly', async () => {
       // Arrange
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
@@ -147,6 +137,7 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'a comment',
         owner: 'user-123',
         threadId: 'thread-123',
+        createdAt: 'createdAt',
       });
 
       await RepliesTableTestHelper.addReply({
@@ -154,21 +145,20 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'a reply',
         owner: 'user-123',
         commentId: 'comment-123',
-        createdAt: 'createdAt',
+      });
+
+      await RepliesTableTestHelper.addReply({
+        id: 'reply-456',
+        content: 'a reply',
+        owner: 'user-123',
+        commentId: 'comment-123',
       });
 
       // Action
-      const reply = await replyRepositoryPostgres.getReplyById('reply-123');
+      const replies = await replyRepositoryPostgres.getRepliesByCommentId('comment-123');
 
       // Assert
-      expect(reply).toStrictEqual(new Reply({
-        id: 'reply-123',
-        content: 'a reply',
-        owner: 'user-123',
-        comment_id: 'comment-123',
-        created_at: 'createdAt',
-        deleted_at: null,
-      }));
+      expect(replies).toHaveLength(2);
     });
   });
 });

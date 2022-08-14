@@ -14,9 +14,8 @@ describe('Reply entities', () => {
     const payload = {
       id: true,
       content: 123,
-      owner: 'user-123',
-      comment_id: 'thread-123',
-      created_at: 'createdAt',
+      username: 'dicoding',
+      created_at: 'date',
     };
 
     expect(() => new Reply(payload)).toThrowError('REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -26,9 +25,8 @@ describe('Reply entities', () => {
     const payload = {
       id: 'reply-123',
       content: 'a reply',
-      owner: 'user-123',
-      comment_id: 'comment-123',
-      created_at: 'createdAt',
+      username: 'dicoding',
+      created_at: 'date',
     };
 
     const reply = new Reply(payload);
@@ -36,9 +34,7 @@ describe('Reply entities', () => {
     expect(reply).toBeInstanceOf(Reply);
     expect(reply.id).toEqual(payload.id);
     expect(reply.content).toEqual(payload.content);
-    expect(reply.owner).toEqual(payload.owner);
-    expect(reply.commentId).toEqual(payload.comment_id);
-    expect(reply.createdAt).toEqual(payload.created_at);
-    expect(reply.deletedAt).toEqual(payload.deleted_at);
+    expect(reply.username).toEqual(payload.username);
+    expect(reply.date).toEqual(payload.created_at);
   });
 });

@@ -14,8 +14,7 @@ describe('Comment entities', () => {
     const payload = {
       id: true,
       content: 123,
-      owner: 'user-123',
-      thread_id: 'thread-123',
+      username: 'dicoding',
       created_at: 'createdAt',
     };
 
@@ -26,9 +25,8 @@ describe('Comment entities', () => {
     const payload = {
       id: 'comment-123',
       content: 'a comment',
-      owner: 'user-123',
-      thread_id: 'thread-123',
-      created_at: 'createdAt',
+      username: 'dicoding',
+      created_at: 'thread-123',
     };
 
     const comment = new Comment(payload);
@@ -36,9 +34,7 @@ describe('Comment entities', () => {
     expect(comment).toBeInstanceOf(Comment);
     expect(comment.id).toEqual(payload.id);
     expect(comment.content).toEqual(payload.content);
-    expect(comment.owner).toEqual(payload.owner);
-    expect(comment.threadId).toEqual(payload.thread_id);
-    expect(comment.createdAt).toEqual(payload.created_at);
-    expect(comment.deletedAt).toEqual(payload.deleted_at);
+    expect(comment.username).toEqual(payload.username);
+    expect(comment.date).toEqual(payload.created_at);
   });
 });

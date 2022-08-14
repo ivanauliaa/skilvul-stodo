@@ -116,18 +116,18 @@ describe('CommentRepositoryPostgres', () => {
     });
   });
 
-  describe('getCommentById', () => {
+  describe('verifyCommentAvailability', () => {
     it('should throw NotFoundError when comment not found', async () => {
       // Arrange
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       // Action & Assert
-      await expect(commentRepositoryPostgres.getCommentById('comment-123'))
+      await expect(commentRepositoryPostgres.verifyCommentAvailability('comment-123'))
         .rejects
         .toThrowError(NotFoundError);
     });
 
-    it('should return comment correctly', async () => {
+    it('should not throw NotFoundError when comment is exists', async () => {
       // Arrange
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -146,18 +146,45 @@ describe('CommentRepositoryPostgres', () => {
         createdAt: 'createdAt',
       });
 
-      // Action
-      const comment = await commentRepositoryPostgres.getCommentById('comment-123');
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentAvailability('comment-123'))
+        .resolves.not.toThrowError(NotFoundError);
+    });
+  });
 
-      // Assert
-      expect(comment).toStrictEqual(new Comment({
+  describe('getCommentsByThreadId', () => {
+    it('should return comments by thread id correctly', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      await ThreadsTableTestHelper.addThread({
+        id: 'thread-123',
+        title: 'thread title',
+        body: 'thread body',
+        owner: 'user-123',
+      });
+
+      await CommentsTableTestHelper.addComment({
         id: 'comment-123',
         content: 'a comment',
         owner: 'user-123',
-        thread_id: 'thread-123',
-        created_at: 'createdAt',
-        deleted_at: null,
-      }));
+        threadId: 'thread-123',
+        createdAt: 'createdAt',
+      });
+
+      await CommentsTableTestHelper.addComment({
+        id: 'comment-456',
+        content: 'a comment',
+        owner: 'user-123',
+        threadId: 'thread-123',
+        createdAt: 'createdAt',
+      });
+
+      // Action
+      const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
+
+      // Assert
+      expect(comments).toHaveLength(2);
     });
   });
 });

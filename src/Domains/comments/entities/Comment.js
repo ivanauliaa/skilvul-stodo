@@ -4,21 +4,19 @@ class Comment {
 
     this.id = payload.id;
     this.content = payload.content;
-    this.owner = payload.owner;
-    this.threadId = payload.thread_id;
-    this.createdAt = payload.created_at;
-    this.deletedAt = payload.deleted_at;
+    this.username = payload.username;
+    this.date = payload.created_at;
   }
 
   _verifyPayload({
-    id, content, owner, thread_id: threadId, created_at: createdAt,
+    id, content, username, created_at: date,
   }) {
-    if (!id || !content || !owner || !threadId || !createdAt) {
+    if (!id || !content || !username || !date) {
       throw new Error('COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof content !== 'string' || typeof owner !== 'string'
-      || typeof threadId !== 'string' || typeof createdAt !== 'string') {
+    if (typeof id !== 'string' || typeof content !== 'string' || typeof username !== 'string'
+      || typeof date !== 'string') {
       throw new Error('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

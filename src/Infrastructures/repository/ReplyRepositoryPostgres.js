@@ -64,21 +64,15 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     }
   }
 
-  async getReplyById(id) {
+  async getRepliesByCommentId(commentId) {
     const stmt = {
-      text: 'SELECT * FROM replies WHERE id = $1',
-      values: [id],
+      text: 'SELECT * FROM replies WHERE comment_id = $1 ORDER BY created_at ASC',
+      values: [commentId],
     };
 
     const result = await this._pool.query(stmt);
 
-    if (!result.rowCount) {
-      throw new NotFoundError('reply not found');
-    }
-
-    return new Reply({
-      ...result.rows[0],
-    });
+    return result.rows;
   }
 }
 
