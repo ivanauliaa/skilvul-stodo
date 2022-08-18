@@ -169,7 +169,7 @@ describe('CommentRepositoryPostgres', () => {
         content: 'a comment',
         owner: 'user-123',
         threadId: 'thread-123',
-        createdAt: 'createdAt',
+        createdAt: '1',
       });
 
       await CommentsTableTestHelper.addComment({
@@ -177,14 +177,31 @@ describe('CommentRepositoryPostgres', () => {
         content: 'a comment',
         owner: 'user-123',
         threadId: 'thread-123',
-        createdAt: 'createdAt',
+        createdAt: '2',
       });
 
       // Action
       const comments = await commentRepositoryPostgres.getCommentsByThreadId('thread-123');
+      const [comment1, comment2] = comments;
 
       // Assert
       expect(comments).toHaveLength(2);
+      expect(comment1).toStrictEqual({
+        id: 'comment-123',
+        content: 'a comment',
+        owner: 'user-123',
+        thread_id: 'thread-123',
+        created_at: '1',
+        deleted_at: null,
+      });
+      expect(comment2).toStrictEqual({
+        id: 'comment-456',
+        content: 'a comment',
+        owner: 'user-123',
+        thread_id: 'thread-123',
+        created_at: '2',
+        deleted_at: null,
+      });
     });
   });
 });

@@ -29,17 +29,11 @@ class GetThreadByIdUseCase {
       for (let j = 0; j < repliesQuery.length; j += 1) {
         repliesQuery[j].username = await this._userRepository
           .getUserUsernameById(repliesQuery[j].owner);
-        repliesQuery[j].content = repliesQuery[j].deleted_at
-          ? '**balasan telah dihapus**'
-          : repliesQuery[j].content;
         repliesQuery[j] = new Reply(repliesQuery[j]);
       }
 
       commentsQuery[i].username = await this._userRepository
         .getUserUsernameById(commentsQuery[i].owner);
-      commentsQuery[i].content = commentsQuery[i].deleted_at
-        ? '**komentar telah dihapus**'
-        : commentsQuery[i].content;
       commentsQuery[i] = new Comment(commentsQuery[i]);
       commentsQuery[i].replies = repliesQuery;
     }

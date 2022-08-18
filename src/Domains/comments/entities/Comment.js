@@ -3,7 +3,7 @@ class Comment {
     this._verifyPayload(payload);
 
     this.id = payload.id;
-    this.content = payload.content;
+    this.content = this._mapContent(payload.content, payload.deleted_at);
     this.username = payload.username;
     this.date = payload.created_at;
   }
@@ -19,6 +19,10 @@ class Comment {
       || typeof date !== 'string') {
       throw new Error('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
+  }
+
+  _mapContent(content, deletedAt) {
+    return deletedAt ? '**komentar telah dihapus**' : content;
   }
 }
 

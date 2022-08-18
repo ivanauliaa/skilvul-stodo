@@ -37,4 +37,22 @@ describe('Reply entities', () => {
     expect(reply.username).toEqual(payload.username);
     expect(reply.date).toEqual(payload.created_at);
   });
+
+  it('should create Reply entities correctly with non null deleted_at', () => {
+    const payload = {
+      id: 'reply-123',
+      content: 'a reply',
+      username: 'dicoding',
+      created_at: 'date',
+      deleted_at: new Date().toISOString(),
+    };
+
+    const reply = new Reply(payload);
+
+    expect(reply).toBeInstanceOf(Reply);
+    expect(reply.id).toEqual(payload.id);
+    expect(reply.content).toEqual('**balasan telah dihapus**');
+    expect(reply.username).toEqual(payload.username);
+    expect(reply.date).toEqual(payload.created_at);
+  });
 });

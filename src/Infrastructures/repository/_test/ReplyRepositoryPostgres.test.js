@@ -137,7 +137,6 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'a comment',
         owner: 'user-123',
         threadId: 'thread-123',
-        createdAt: 'createdAt',
       });
 
       await RepliesTableTestHelper.addReply({
@@ -145,6 +144,7 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'a reply',
         owner: 'user-123',
         commentId: 'comment-123',
+        createdAt: '1',
       });
 
       await RepliesTableTestHelper.addReply({
@@ -152,13 +152,31 @@ describe('ReplyRepositoryPostgres', () => {
         content: 'a reply',
         owner: 'user-123',
         commentId: 'comment-123',
+        createdAt: '2',
       });
 
       // Action
       const replies = await replyRepositoryPostgres.getRepliesByCommentId('comment-123');
+      const [reply1, reply2] = replies;
 
       // Assert
       expect(replies).toHaveLength(2);
+      expect(reply1).toStrictEqual({
+        id: 'reply-123',
+        content: 'a reply',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+        created_at: '1',
+        deleted_at: null,
+      });
+      expect(reply2).toStrictEqual({
+        id: 'reply-456',
+        content: 'a reply',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+        created_at: '2',
+        deleted_at: null,
+      });
     });
   });
 });

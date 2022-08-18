@@ -26,7 +26,7 @@ describe('Comment entities', () => {
       id: 'comment-123',
       content: 'a comment',
       username: 'dicoding',
-      created_at: 'thread-123',
+      created_at: 'createdAt',
     };
 
     const comment = new Comment(payload);
@@ -34,6 +34,24 @@ describe('Comment entities', () => {
     expect(comment).toBeInstanceOf(Comment);
     expect(comment.id).toEqual(payload.id);
     expect(comment.content).toEqual(payload.content);
+    expect(comment.username).toEqual(payload.username);
+    expect(comment.date).toEqual(payload.created_at);
+  });
+
+  it('should create Comment entities correctly with non null deleted_at', () => {
+    const payload = {
+      id: 'comment-123',
+      content: 'a comment',
+      username: 'dicoding',
+      created_at: 'createdAt',
+      deleted_at: new Date().toISOString(),
+    };
+
+    const comment = new Comment(payload);
+
+    expect(comment).toBeInstanceOf(Comment);
+    expect(comment.id).toEqual(payload.id);
+    expect(comment.content).toEqual('**komentar telah dihapus**');
     expect(comment.username).toEqual(payload.username);
     expect(comment.date).toEqual(payload.created_at);
   });
