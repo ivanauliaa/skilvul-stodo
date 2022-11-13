@@ -15,6 +15,22 @@ DomainErrorTranslator._directories = {
     new InvariantError('tidak dapat membuat user baru karena karatker username melebihi batas limit'),
   'REGISTER_USER.USERNAME_CONTAIN_RESTRICTED_CHARACTER':
     new InvariantError('tidak dapat membuat user baru karena username mengandung karakter terlarang'),
+  'REGISTER_TODO.NOT_CONTAIN_NEEDED_PROPERTY':
+    new InvariantError('tidak dapat membuat todo baru karena properti yang dibutuhkan tidak ada'),
+  'REGISTER_TODO.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError('tidak dapat membuat todo baru karena tipe data tidak sesuai'),
+  'TODO_OWNER.NOT_CONTAIN_NEEDED_PROPERTY':
+    new InvariantError('tidak dapat membuat entity todo owner karena properti yang dibutuhkan tidak ada'),
+  'TODO_OWNER.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError('tidak dapat membuat entity todo owner karena tipe data tidak sesuai'),
+  'TODO_ID.NOT_CONTAIN_NEEDED_PROPERTY':
+    new InvariantError('tidak dapat membuat entity todo id karena properti yang dibutuhkan tidak ada'),
+  'TODO_ID.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError('tidak dapat membuat entity todo id karena tipe data tidak sesuai'),
+  'UPDATE_TODO.NOT_CONTAIN_NEEDED_PROPERTY':
+    new InvariantError('tidak dapat membuat entity update todo karena properti yang dibutuhkan tidak ada'),
+  'UPDATE_TODO.NOT_MEET_DATA_TYPE_SPECIFICATION':
+    new InvariantError('tidak dapat membuat entity update todo karena tipe data tidak sesuai'),
   'NEW_AUTH.NOT_CONTAIN_NEEDED_PROPERTY':
     new InvariantError('tidak dapat membuat entity new auth karena properti yang dibutuhkan tidak ada'),
   'NEW_AUTH.NOT_MEET_DATA_TYPE_SPECIFICATION':

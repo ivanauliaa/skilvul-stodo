@@ -1,19 +1,13 @@
-const routes = (handler) => [
-  {
-    method: 'POST',
-    path: '/authentications',
-    handler: handler.postAuthenticationHandler,
-  },
-  {
-    method: 'PUT',
-    path: '/authentications',
-    handler: handler.putAuthenticationHandler,
-  },
-  {
-    method: 'DELETE',
-    path: '/authentications',
-    handler: handler.deleteAuthenticationHandler,
-  },
-];
+const express = require('express');
+const AuthenticationsHandler = require('./handler');
+
+const routes = (container) => {
+  const router = express.Router();
+  const handler = new AuthenticationsHandler(container);
+
+  router.post('/', handler.postAuthenticationHandler);
+
+  return router;
+};
 
 module.exports = routes;

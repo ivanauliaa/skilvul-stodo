@@ -1,5 +1,6 @@
 const AuthenticationTokenManager = require('../../Applications/security/AuthenticationTokenManager');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
+const AuthenticationError = require('../../Commons/exceptions/AuthenticationError');
 
 class JwtTokenManager extends AuthenticationTokenManager {
   constructor(jwt) {
@@ -8,11 +9,11 @@ class JwtTokenManager extends AuthenticationTokenManager {
   }
 
   async createAccessToken(payload) {
-    return this._jwt.generate(payload, process.env.ACCESS_TOKEN_KEY);
+    return this._jwt.sign(payload, process.env.ACCESS_TOKEN_KEY);
   }
 
   async createRefreshToken(payload) {
-    return this._jwt.generate(payload, process.env.REFRESH_TOKEN_KEY);
+    return this._jwt.sign(payload, process.env.REFRESH_TOKEN_KEY);
   }
 
   async verifyRefreshToken(token) {
@@ -25,8 +26,12 @@ class JwtTokenManager extends AuthenticationTokenManager {
   }
 
   async decodePayload(token) {
-    const artifacts = this._jwt.decode(token);
-    return artifacts.decoded.payload;
+    try {
+      const decoded = this._jwt.decode(token);
+      return decoded;
+    } catch (err) {
+      throw new AuthenticationError('unauthenticated');
+    }
   }
 }
 

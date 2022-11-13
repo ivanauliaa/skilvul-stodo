@@ -4,12 +4,12 @@ const NewAuth = require('../../Domains/authentications/entities/NewAuth');
 class LoginUserUseCase {
   constructor({
     userRepository,
-    authenticationRepository,
+    // authenticationRepository,
     authenticationTokenManager,
     passwordHash,
   }) {
     this._userRepository = userRepository;
-    this._authenticationRepository = authenticationRepository;
+    // this._authenticationRepository = authenticationRepository;
     this._authenticationTokenManager = authenticationTokenManager;
     this._passwordHash = passwordHash;
   }
@@ -29,8 +29,8 @@ class LoginUserUseCase {
       .createRefreshToken({ id, username });
 
     const newAuthentication = new NewAuth({ accessToken, refreshToken });
-
-    await this._authenticationRepository.addToken(refreshToken);
+    //
+    // await this._authenticationRepository.addToken(refreshToken);
 
     return newAuthentication;
   }

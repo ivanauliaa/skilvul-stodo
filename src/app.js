@@ -4,9 +4,12 @@ const container = require('./Infrastructures/container');
 
 const start = async () => {
   const server = await createServer(container);
-  await server.start();
+  const port = process.env.PORT;
+  const host = process.env.HOST;
 
-  console.log(`server start at ${server.info.uri}`);
+  server.listen(port, host, () => {
+    console.log(`server start at ${host}:${port}`);
+  });
 };
 
 start();

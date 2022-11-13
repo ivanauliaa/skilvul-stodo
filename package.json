@@ -6,10 +6,9 @@
   "scripts": {
     "start": "node src/app.js",
     "start:dev": "nodemon src/app.js",
-    "test": "jest --setupFiles dotenv/config -i",
-    "test:watch": "jest --watchAll --coverage --setupFiles dotenv/config -i",
-    "migrate": "node-pg-migrate",
-    "migrate:test": "node-pg-migrate -f config/database/test.json"
+    "migrate:up": "sequelize-cli db:migrate",
+    "migrate:down": "sequelize-cli db:migrate:undo",
+    "swagger-autogen": "node swagger.js"
   },
   "keywords": [],
   "author": "",
@@ -17,11 +16,19 @@
   "dependencies": {
     "@hapi/hapi": "^20.2.2",
     "@hapi/jwt": "^2.1.1",
+    "and": "^0.0.3",
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.1",
     "dotenv": "^16.0.1",
+    "express": "^4.18.2",
     "instances-container": "^2.0.6",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^3.0.0-rc.1",
     "nanoid": "^3.3.4",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "sequelize": "^6.25.4",
+    "swagger-autogen": "^2.22.0",
+    "swagger-ui-express": "^4.6.0"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
@@ -30,6 +37,7 @@
     "eslint-plugin-import": "^2.26.0",
     "jest": "^28.1.0",
     "node-pg-migrate": "^6.2.1",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "sequelize-cli": "^6.5.2"
   }
 }

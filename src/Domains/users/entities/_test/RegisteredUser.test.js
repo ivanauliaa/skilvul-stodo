@@ -12,7 +12,7 @@ describe('A RegisteredUser entities', () => {
 
   it('should throw error when payload did not meet data type specification', () => {
     const payload = {
-      id: 123,
+      id: '123',
       username: 'dicoding',
       fullname: 'Dicoding Indonesia',
     };
@@ -22,7 +22,7 @@ describe('A RegisteredUser entities', () => {
 
   it('should create registeredUser object correctly', () => {
     const payload = {
-      id: 'user-123',
+      id: 1,
       username: 'dicoding',
       fullname: 'Dicoding Indonesia',
     };
